@@ -1,0 +1,89 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+////////////////////////////////////////////////////////////////////////////////
+//   ____  ____ 
+//  /   /\/   / 
+// /___/  \  /    Vendor: Xilinx 
+// \   \   \/     Version : 14.7
+//  \   \         Application : sch2hdl
+//  /   /         Filename : ScoreBoard.vf
+// /___/   /\     Timestamp : 12/22/2017 12:26:59
+// \   \  /  \ 
+//  \___\/\___\ 
+//
+//Command: sch2hdl -intstyle ise -family kintex7 -verilog C:/Users/nicekingwei/workspace/verilog/12/counter/ScoreBoard.vf -w C:/Users/nicekingwei/workspace/verilog/12/counter/ScoreBoard.sch
+//Design Name: ScoreBoard
+//Device: kintex7
+//Purpose:
+//    This verilog netlist is translated from an ECS schematic.It can be 
+//    synthesized and simulated, but it should not be modified. 
+//
+`timescale 1ns / 1ps
+
+module ScoreBoard(clk_100mhz, 
+                  HEXS, 
+                  LES, 
+                  points, 
+                  RSTN, 
+                  AN, 
+                  SEGMENT);
+
+    input clk_100mhz;
+    input [15:0] HEXS;
+    input [3:0] LES;
+    input [3:0] points;
+    input RSTN;
+   output [3:0] AN;
+   output [7:0] SEGMENT;
+   
+   wire [31:0] clkdiv;
+   wire [3:0] o;
+   wire V0;
+   wire V5;
+   wire XLXN_31;
+   wire XLXN_32;
+   
+   VCC  x (.P(V5));
+   clkdiv  XLXI_2 (.clk(clk_100mhz), 
+                  .rst(RSTN), 
+                  .clkdiv(clkdiv[31:0]));
+   MUX4to1b4  XLXI_3 (.l0(HEXS[3:0]), 
+                     .l1(HEXS[7:4]), 
+                     .l2(HEXS[11:8]), 
+                     .l3(HEXS[15:12]), 
+                     .S(clkdiv[18:17]), 
+                     .o(o[3:0]));
+   MUX4to1  XLXI_4 (.l0(LES[0]), 
+                   .l1(LES[1]), 
+                   .l2(LES[2]), 
+                   .l3(LES[3]), 
+                   .S(clkdiv[18:17]), 
+                   .o(XLXN_31));
+   MUX4to1  XLXI_5 (.l0(points[0]), 
+                   .l1(points[1]), 
+                   .l2(points[2]), 
+                   .l3(points[3]), 
+                   .S(clkdiv[18:17]), 
+                   .o(XLXN_32));
+   MUX4to1b4  XLXI_7 (.l0({V5, V5, V5, V0}), 
+                     .l1({V5, V5, V0, V5}), 
+                     .l2({V5, V0, V5, V5}), 
+                     .l3({V0, V5, V5, V5}), 
+                     .S(clkdiv[18:17]), 
+                     .o(AN[3:0]));
+   MyNewMC14495  XLXI_8 (.D0(o[0]), 
+                        .D1(o[1]), 
+                        .D2(o[2]), 
+                        .D3(o[3]), 
+                        .LE(XLXN_31), 
+                        .POINT(XLXN_32), 
+                        .a(SEGMENT[0]), 
+                        .b(SEGMENT[1]), 
+                        .c(SEGMENT[2]), 
+                        .d(SEGMENT[3]), 
+                        .e(SEGMENT[4]), 
+                        .f(SEGMENT[5]), 
+                        .g(SEGMENT[6]), 
+                        .p(SEGMENT[7]));
+   GND  y (.G(V0));
+endmodule
